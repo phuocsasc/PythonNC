@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Main Page</title>
+      <style>
+            /* Reset some default styles */
+            * {
+                  margin: 0;
+                  padding: 0;
+                  box-sizing: border-box;
+                  font-family: Arial, sans-serif;
+            }
+
+            body {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  flex-direction: column;
+                  min-height: 100vh;
+                  background-color: #f3f4f6;
+                  color: #333;
+            }
+
+            h1 {
+                  margin: 20px 0;
+                  font-size: 2rem;
+                  color: #2c3e50;
+            }
+
+            h2 {
+                  margin-top: 20px;
+                  font-size: 1.5rem;
+                  color: #34495e;
+            }
+
+            /* Flash messages styling */
+            .error {
+                  color: #d9534f;
+                  font-weight: bold;
+                  margin-bottom: 15px;
+            }
+
+            .success {
+                  color: #5cb85c;
+                  font-weight: bold;
+                  margin-bottom: 15px;
+            }
+
+            /* Form styling */
+            form {
+                  margin-bottom: 20px;
+                  padding: 15px;
+                  background: #ffffff;
+                  border: 1px solid #ddd;
+                  border-radius: 5px;
+                  width: 100%;
+                  max-width: 500px;
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            label {
+                  display: block;
+                  font-size: 0.9rem;
+                  color: #333;
+                  margin-top: 10px;
+                  margin-bottom: 5px;
+            }
+
+            input[type="text"] {
+                  width: calc(100% - 20px);
+                  padding: 8px;
+                  font-size: 1rem;
+                  margin-bottom: 15px;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+            }
+
+            button {
+                  display: inline-block;
+                  padding: 8px 15px;
+                  background-color: #3498db;
+                  color: white;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  font-size: 1rem;
+                  transition: background 0.3s;
+            }
+
+            button:hover {
+                  background-color: #2980b9;
+            }
+
+            a {
+                  display: inline-block;
+                  padding: 8px 15px;
+                  background-color: #e74c3c;
+                  color: white;
+                  border-radius: 4px;
+                  text-decoration: none;
+                  transition: background 0.3s;
+                  margin-left: 10px;
+            }
+
+            a:hover {
+                  background-color: #c0392b;
+            }
+
+            /* Table styling */
+            table {
+                  width: 100%;
+                  max-width: 700px;
+                  margin-top: 20px;
+                  border-collapse: collapse;
+                  background: #ffffff;
+                  border-radius: 5px;
+                  overflow: hidden;
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            th,
+            td {
+                  padding: 12px 15px;
+                  text-align: left;
+                  border-bottom: 1px solid #ddd;
+            }
+
+            th {
+                  background-color: #3498db;
+                  color: white;
+                  font-weight: bold;
+            }
+
+            tr:hover {
+                  background-color: #f1f1f1;
+            }
+
+            tr:last-child td {
+                  border-bottom: none;
+            }
+
+            /* Checkbox styling */
+            input[type="checkbox"] {
+                  transform: scale(1.2);
+                  margin-right: 5px;
+                  cursor: pointer;
+            }
+
+            /* Align buttons in form */
+            .form-buttons {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-top: 10px;
+            }
+      </style>
+</head>
+
+<body>
+      <h1>Main Page</h1>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, m in messages %}
+      <p class="{{ category }}">{{ m }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+      <!-- Form thêm mới dữ liệu -->
+      <h2>Thêm mới dữ liệu</h2>
+      <form action="{{ url_for('add_data') }}" method="post">
+            <label for="class">Class:</label>
+            <input type="text" name="class" required>
+            <label for="name">Họ Tên:</label>
+            <input type="text" name="name" required>
+            <button type="submit">Thêm</button>
+      </form>
+
+      <!-- Bảng dữ liệu -->
+      <form action="{{ url_for('details') }}" method="post">
+            <table>
+                  <tr>
+                        <th>Select</th>
+                        <th>Class</th>
+                        <th>Họ Tên</th>
+                  </tr>
+                  {% for row in data %}
+                  <tr>
+                        <td><input type="checkbox" name="selected" value="{{ row[0] }}"></td>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                  </tr>
+                  {% endfor %}
+            </table>
+            <div class="form-buttons">
+                  <button type="submit">Go to Details</button>
+                  <a href="{{ url_for('login') }}">Log out</a>
+            </div>
+      </form>
+</body>
+
+</html>

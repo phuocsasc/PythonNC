@@ -5,6 +5,7 @@ from psycopg2 import sql
 from tkinter import ttk
 from tkinter import font
 from PIL import Image, ImageTk
+from database import Database
 
 
 class DatabaseApp:
@@ -53,21 +54,37 @@ class DatabaseApp:
         tk.Button(self.connection_frame, text="Connect",font=font_bold, command=self.connect_db, bd=5, width=10, bg='#77CDFF').grid(row=2, column=1, columnspan=1, pady=10, sticky='e')
 
     def connect_db(self):
-        try:
-            self.conn = psycopg2.connect(
-                dbname=self.db_name.get(),
-                user=self.user.get(),
-                password=self.password.get(),
-                host=self.host.get(),
-                port=self.port.get()
-            )
-            self.cur = self.conn.cursor()
-            messagebox.showinfo("Success", "Connected to the database successfully!")
-            self.connection_frame.grid_forget()  # Ẩn khung đăng nhập sau khi thành công
-            self.background_label.place_forget()  # Ẩn hình nền
-            self.create_main_screen()
-        except Exception as e:
-            messagebox.showerror("Error", f"Error connecting to the database: {e}")
+        # try:
+            # self.conn = psycopg2.connect(
+            #     dbname=self.db_name.get(),
+            #     user=self.user.get(),
+            #     password=self.password.get(),
+            #     host=self.host.get(),
+            #     port=self.port.get()
+            # )
+            # self.cur = self.conn.cursor()
+            # messagebox.showinfo("Success", "Connected to the database successfully!")
+            # self.connection_frame.grid_forget()  # Ẩn khung đăng nhập sau khi thành công
+            # self.background_label.place_forget()  # Ẩn hình nền
+            # self.create_main_screen()
+        # except :
+            # messagebox.showerror("Error", f"Error connecting to the database:")
+            self.database = Database(
+                                db_name=self.db_name.get(),
+                                user=self.user.get(),
+                                password=self.password.get(),
+                                host=self.host.get(),
+                                port=self.port.get()
+                                                    )
+
+            if self.database.connect():  # Sử dụng phương thức connect từ lớp Database
+                messagebox.showinfo("Success", "Connected to the database successfully!")
+                self.connection_frame.grid_forget()
+                self.background_label.place_forget()
+                self.create_main_screen()
+            else:
+                messagebox.showerror("Error", "Failed to connect to the database.")
+        
 
     def create_main_screen(self):
         font_title = font.Font(family='Trajan Pro', size=16,)
@@ -145,12 +162,12 @@ class DatabaseApp:
         label.grid(row=3,column=1, rowspan=2, pady=10)
         # Giữ tham chiếu tới ảnh để tránh bị garbage collected
         label.image = photo
-        
+       
     def load_data(self):
         try:
             query = sql.SQL("SELECT * FROM {}").format(sql.Identifier(self.table_name.get()))
-            self.cur.execute(query)
-            rows = self.cur.fetchall()
+            self.database.cur.execute(query)
+            rows = self.database.cur.fetchall()
             self.tree.delete(*self.tree.get_children())  # Clear previous data
             for index, row in enumerate(rows, start=1):
                 self.tree.insert('', 'end', values=(index, row[0], row[1]))  # Assumes columns are [name, mssv, major]
@@ -161,8 +178,8 @@ class DatabaseApp:
         try:
             insert_query = sql.SQL("INSERT INTO {} (hoten, class) VALUES (%s, %s)").format(sql.Identifier(self.table_name.get()))
             data_to_insert = (self.column1.get(), self.column2.get())
-            self.cur.execute(insert_query, data_to_insert)
-            self.conn.commit()
+            self.database.cur.execute(insert_query, data_to_insert)
+            self.database.conn.commit()
             messagebox.showinfo("Success", "Data inserted successfully!")
             
         except Exception as e:
@@ -171,8 +188,8 @@ class DatabaseApp:
     def search_data(self):
         try:
             search_query = sql.SQL("SELECT * FROM {} WHERE class = %s").format(sql.Identifier(self.table_name.get()))
-            self.cur.execute(search_query, (self.search_value.get(),))
-            rows = self.cur.fetchall()
+            self.database.cur.execute(search_query, (self.search_value.get(),))
+            rows = self.database.cur.fetchall()
 
             # Clear previous data from Treeview
             for item in self.tree.get_children():

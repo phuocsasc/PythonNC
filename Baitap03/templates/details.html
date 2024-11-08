@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Details Page</title>
+      <style>
+            /* Reset some default styles */
+            * {
+                  margin: 0;
+                  padding: 0;
+                  box-sizing: border-box;
+                  font-family: Arial, sans-serif;
+            }
+
+            body {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  min-height: 100vh;
+                  background-color: #f3f4f6;
+                  color: #333;
+                  padding: 20px;
+            }
+
+            h1 {
+                  font-size: 2rem;
+                  color: #2c3e50;
+                  margin-bottom: 20px;
+            }
+
+            /* Flash messages styling */
+            .message {
+                  color: #d9534f;
+                  font-weight: bold;
+                  margin-bottom: 15px;
+            }
+
+            /* Table styling */
+            table {
+                  width: 100%;
+                  max-width: 700px;
+                  border-collapse: collapse;
+                  background: #ffffff;
+                  border-radius: 5px;
+                  overflow: hidden;
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                  margin-bottom: 20px;
+            }
+
+            th,
+            td {
+                  padding: 12px 15px;
+                  text-align: left;
+                  border-bottom: 1px solid #ddd;
+            }
+
+            th {
+                  background-color: #3498db;
+                  color: white;
+                  font-weight: bold;
+                  text-align: center;
+            }
+
+            tr:hover {
+                  background-color: #f1f1f1;
+            }
+
+            tr:last-child td {
+                  border-bottom: none;
+            }
+
+            /* Buttons styling */
+            a {
+                  display: inline-block;
+                  padding: 10px 20px;
+                  background-color: #e74c3c;
+                  color: white;
+                  border-radius: 4px;
+                  text-decoration: none;
+                  margin: 10px 5px;
+                  transition: background 0.3s;
+            }
+
+            a:hover {
+                  background-color: #c0392b;
+            }
+
+            .back-link {
+                  background-color: #95a5a6;
+            }
+
+            .back-link:hover {
+                  background-color: #7f8c8d;
+            }
+      </style>
+</head>
+
+<body>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for m in messages %}
+      <p class="message">{{ m }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+      <h1>Details Page</h1>
+
+      <table>
+            <tr>
+                  <th>Class</th>
+                  <th>Họ Tên</th>
+            </tr>
+            {% for row in data %}
+            <tr>
+                  <td>{{ row[0] }}</td>
+                  <td>{{ row[1] }}</td>
+            </tr>
+            {% endfor %}
+      </table>
+
+      <a href="{{ url_for('home') }}" class="back-link">Back to Main Page</a>
+      <a href="{{ url_for('login') }}">Log out</a>
+</body>
+
+</html>
