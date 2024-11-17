@@ -14,7 +14,7 @@ class DatabaseApp:
         self.root.title("QUẢN LÝ SINH VIÊN")
 
         # Database connection fields
-        self.db_name = tk.StringVar(value='dbtest')
+        self.db_name = tk.StringVar(value='baitap2')
         self.user = tk.StringVar(value='postgres')
         self.password = tk.StringVar(value='123456')
         self.host = tk.StringVar(value='localhost')
@@ -54,21 +54,6 @@ class DatabaseApp:
         tk.Button(self.connection_frame, text="Connect",font=font_bold, command=self.connect_db, bd=5, width=10, bg='#77CDFF').grid(row=2, column=1, columnspan=1, pady=10, sticky='e')
 
     def connect_db(self):
-        # try:
-            # self.conn = psycopg2.connect(
-            #     dbname=self.db_name.get(),
-            #     user=self.user.get(),
-            #     password=self.password.get(),
-            #     host=self.host.get(),
-            #     port=self.port.get()
-            # )
-            # self.cur = self.conn.cursor()
-            # messagebox.showinfo("Success", "Connected to the database successfully!")
-            # self.connection_frame.grid_forget()  # Ẩn khung đăng nhập sau khi thành công
-            # self.background_label.place_forget()  # Ẩn hình nền
-            # self.create_main_screen()
-        # except :
-            # messagebox.showerror("Error", f"Error connecting to the database:")
             self.database = Database(
                                 db_name=self.db_name.get(),
                                 user=self.user.get(),
@@ -78,12 +63,12 @@ class DatabaseApp:
                                                     )
 
             if self.database.connect():  # Sử dụng phương thức connect từ lớp Database
-                messagebox.showinfo("Success", "Connected to the database successfully!")
+                messagebox.showinfo("Success", "Kết nối vào database thành công!")
                 self.connection_frame.grid_forget()
                 self.background_label.place_forget()
                 self.create_main_screen()
             else:
-                messagebox.showerror("Error", "Failed to connect to the database.")
+                messagebox.showerror("Error", "Kết nối vào database thất bại.")
         
 
     def create_main_screen(self):
@@ -98,7 +83,7 @@ class DatabaseApp:
         lable_title.grid(row=0, column=0, columnspan=2, pady=(10,0))
         
         # Query section
-        query_frame = tk.LabelFrame(self.root, text="Load Data", width=200, font=font_title, fg="white", bg='#384B70', bd=5)
+        query_frame = tk.LabelFrame(self.root, text="Truy cập dữ liệu", width=200, font=font_title, fg="white", bg='#384B70', bd=5)
         query_frame.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
         tk.Label(query_frame, text="Nhập tên bảng:", font=font_text, bg='#384B70', fg='white').grid(row=0, column=0, padx=5, pady=5)
@@ -112,36 +97,45 @@ class DatabaseApp:
         style = ttk.Style()
         style.configure("Treeview.Heading", background="#384B70", foreground="#9A7E6F", font=font_bold)
 
-        self.tree = ttk.Treeview(self.root, columns=('STT', 'LỚP', 'HỌ VÀ TÊN'), show='headings', height=10)
+        self.tree = ttk.Treeview(self.root, columns=('STT', 'HỌ VÀ TÊN', 'MSSV', 'LỚP'), show='headings', height=10)
                 
         self.tree.column('STT', width=50, anchor='center') 
-        self.tree.column('LỚP', width=140, anchor='center')
-        self.tree.column('HỌ VÀ TÊN', width=230, anchor='w') 
+        self.tree.column('HỌ VÀ TÊN', width=180, anchor='w') 
+        self.tree.column('MSSV', width=100, anchor='w') 
+        self.tree.column('LỚP', width=100, anchor='center')
+        
 
         # Set heading name
         self.tree.heading('STT', text='STT')
-        self.tree.heading('LỚP', text='LỚP')
         self.tree.heading('HỌ VÀ TÊN', text='HỌ VÀ TÊN')
+        self.tree.heading('MSSV', text='MSSV')
+        self.tree.heading('LỚP', text='LỚP')
+        
     
         self.tree.grid(row=3, column=0, padx=5, pady=5, )
 
         # Insert section
-        insert_frame = tk.LabelFrame(self.root, text="Insert Data", font=font_title, fg="white", bg='#384B70', labelanchor='n', bd=5)
+        insert_frame = tk.LabelFrame(self.root, text="Thêm Sinh Viên", font=font_title, fg="white", bg='#384B70', labelanchor='n', bd=5)
         insert_frame.grid(row=4, column=0, columnspan=1, padx=10, pady=10)
 
-        self.column1 = tk.StringVar()
-        self.column2 = tk.StringVar()
+        self.column1 = tk.StringVar()  # Họ và tên
+        self.column2 = tk.StringVar()  # MSSV
+        self.column3 = tk.StringVar()  # Lớp
 
         tk.Label(insert_frame, text="HỌ VÀ TÊN:", font=font_text, bg='#384B70', fg='white').grid(row=0, column=0, padx=5, pady=5)
         tk.Entry(insert_frame, textvariable=self.column1, width=33, font=font_text, bd=5).grid(row=0, column=1,padx=5, pady=5)
-
-        tk.Label(insert_frame, text="LỚP", font=font_text, bg='#384B70', fg='white').grid(row=1, column=0, padx=5, pady=5, sticky='w')
+        
+        tk.Label(insert_frame, text="MSSV:", font=font_text, bg='#384B70', fg='white').grid(row=1, column=0, padx=5, pady=5, sticky='w')
         tk.Entry(insert_frame, textvariable=self.column2, width=33, font=font_text, bd=5).grid(row=1, column=1, padx=5, pady=5)
 
-        tk.Button(insert_frame, text="Insert Data", command=self.insert_data, width=15, font=font_bold,bg="#D4BDAC", bd=5).grid(row=2, column=1, pady=10,padx=5, sticky='e')
+
+        tk.Label(insert_frame, text="LỚP", font=font_text, bg='#384B70', fg='white').grid(row=2, column=0, padx=5, pady=5, sticky='w')
+        tk.Entry(insert_frame, textvariable=self.column3, width=33, font=font_text, bd=5).grid(row=2, column=1, padx=5, pady=5)
+
+        tk.Button(insert_frame, text="Insert Data", command=self.insert_data, width=15, font=font_bold,bg="#D4BDAC", bd=5).grid(row=3, column=1, pady=10,padx=5, sticky='e')
 
         # Search section
-        search_frame = tk.LabelFrame(self.root, text="Search Student", font=font_title, fg="white", bg='#384B70', bd=5)
+        search_frame = tk.LabelFrame(self.root, text="Lọc sinh viên", font=font_title, fg="white", bg='#384B70', bd=5)
         search_frame.grid(row=1, column=1, sticky='w', padx=(0,10))
 
         self.search_value = tk.StringVar()
@@ -149,7 +143,7 @@ class DatabaseApp:
         tk.Label(search_frame, text="Nhập lớp:", font=font_text, bg='#384B70', fg='white').grid(row=0, column=0, padx=5, pady=5)
         tk.Entry(search_frame, textvariable=self.search_value, font=font_text, bd=5).grid(row=0, column=1, padx=5, pady=5)
 
-        tk.Button(search_frame, text="Search", command=self.search_data, font=font_bold,bg="#D4BDAC", bd=2).grid(row=0, column=2, padx=5, pady=5)
+        tk.Button(search_frame, text="Tìm Kiếm", command=self.search_data, font=font_bold,bg="#D4BDAC", bd=2).grid(row=0, column=2, padx=5, pady=5)
         
         # thêm ảnh vào root
         image = Image.open("imgs/dai-hoc-tot-o-vn-2.png")  # Đường dẫn đến ảnh của bạn
@@ -159,10 +153,12 @@ class DatabaseApp:
         photo = ImageTk.PhotoImage(image)
         # Tạo Label và chèn ảnh vào
         label = tk.Label(root, image=photo)
-        label.grid(row=3,column=1, rowspan=2, pady=10)
+        label.grid(row=3,column=1, rowspan=2, pady=10, sticky='n')
         # Giữ tham chiếu tới ảnh để tránh bị garbage collected
         label.image = photo
        
+    
+            
     def load_data(self):
         try:
             query = sql.SQL("SELECT * FROM {}").format(sql.Identifier(self.table_name.get()))
@@ -170,21 +166,38 @@ class DatabaseApp:
             rows = self.database.cur.fetchall()
             self.tree.delete(*self.tree.get_children())  # Clear previous data
             for index, row in enumerate(rows, start=1):
-                self.tree.insert('', 'end', values=(index, row[0], row[1]))  # Assumes columns are [name, mssv, major]
+                self.tree.insert('', 'end', values=(index, row[1], row[2], row[3]))  # Assumes columns are [mssv, name, class]
         except Exception as e:
-            messagebox.showerror("Error", f"Error loading data: {e}")
+            messagebox.showerror("Error", f"Không tìm thấy dữ liệu: {e}")
 
+
+            
     def insert_data(self):
+        name = self.column1.get()
+        mssv = self.column2.get()
+        student_class = self.column3.get()
+
+        if not name or not mssv or not student_class:
+            messagebox.showerror("Error", "Không được bỏ trống ô nhập liệu!")
+            return
+        
         try:
-            insert_query = sql.SQL("INSERT INTO {} (hoten, class) VALUES (%s, %s)").format(sql.Identifier(self.table_name.get()))
-            data_to_insert = (self.column1.get(), self.column2.get())
-            self.database.cur.execute(insert_query, data_to_insert)
+            # Check if MSSV already exists
+            check_query = sql.SQL("SELECT 1 FROM {} WHERE mssv = %s").format(sql.Identifier(self.table_name.get()))
+            self.database.cur.execute(check_query, (mssv,))
+            if self.database.cur.fetchone():
+                messagebox.showerror("Error", "MSSV đã tồn tại!")
+                return
+            
+            insert_query = sql.SQL("INSERT INTO {} (name, mssv, class) VALUES (%s, %s, %s)").format(sql.Identifier(self.table_name.get()))
+            self.database.cur.execute(insert_query, (name, mssv, student_class))
             self.database.conn.commit()
-            messagebox.showinfo("Success", "Data inserted successfully!")
+            messagebox.showinfo("Success", "Thêm sinh viên mới thành công!")
             
         except Exception as e:
             messagebox.showerror("Error", f"Error inserting data: {e}")
 
+   
     def search_data(self):
         try:
             search_query = sql.SQL("SELECT * FROM {} WHERE class = %s").format(sql.Identifier(self.table_name.get()))
@@ -198,9 +211,9 @@ class DatabaseApp:
             # Display search results
             if rows:
                 for idx, row in enumerate(rows, start=1):
-                    self.tree.insert("", "end", values=(idx, row[0], row[1]))  # Assuming the order of columns is (hoten, mssv)
+                    self.tree.insert("", "end", values=(idx, row[1], row[2], row[3]))  # Assuming the order of columns is (mssv, name, class)
             else:
-                messagebox.showinfo("No Data", "No data found for the given MSSV.")
+                messagebox.showinfo("No Data", "Không tìm thấy lớp này!")
         except Exception as e:
             messagebox.showerror("Error", f"Error searching data: {e}")
 

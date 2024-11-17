@@ -20,6 +20,7 @@
                   align-items: center;
                   flex-direction: column;
                   min-height: 100vh;
+                  min-width: 960px;
                   background-color: #f3f4f6;
                   color: #333;
             }
@@ -57,7 +58,7 @@
                   border: 1px solid #ddd;
                   border-radius: 5px;
                   width: 100%;
-                  max-width: 500px;
+                  max-width: 700px;
                   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
 
@@ -81,7 +82,7 @@
             button {
                   display: inline-block;
                   padding: 8px 15px;
-                  background-color: #3498db;
+                  background-color: #5a6d7a;
                   color: white;
                   border: none;
                   border-radius: 4px;
@@ -91,8 +92,12 @@
             }
 
             button:hover {
-                  background-color: #2980b9;
+                  background-color: #28c1be;
             }
+            button.delete:hover {
+                  background-color: #dd1417 !important;
+            }
+           
 
             a {
                   display: inline-block;
@@ -161,6 +166,7 @@
 
 <body>
       <h1>Main Page</h1>
+      <!-- Hiển thị thông báo -->
       {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
       {% for category, m in messages %}
@@ -172,34 +178,54 @@
       <!-- Form thêm mới dữ liệu -->
       <h2>Thêm mới dữ liệu</h2>
       <form action="{{ url_for('add_data') }}" method="post">
-            <label for="class">Class:</label>
-            <input type="text" name="class" required>
             <label for="name">Họ Tên:</label>
             <input type="text" name="name" required>
+            <label for="mssv">MSSV:</label>
+            <input type="text" name="mssv" required>
+            <label for="class">Class:</label>
+            <input type="text" name="class" required>
             <button type="submit">Thêm</button>
       </form>
 
+      <!-- Form tìm kiếm sinh viên -->
+      <h2>Tìm kiếm sinh viên</h2>
+      <form action="{{ url_for('search_data') }}" method="post">
+            <label for="mssv">Nhập MSSV:</label>
+            <input type="text" name="mssv" placeholder="Nhập MSSV để tìm kiếm" required>
+            <button type="submit">Tìm kiếm</button>
+      </form>
+
       <!-- Bảng dữ liệu -->
-      <form action="{{ url_for('details') }}" method="post">
-            <table>
-                  <tr>
-                        <th>Select</th>
-                        <th>Class</th>
-                        <th>Họ Tên</th>
-                  </tr>
-                  {% for row in data %}
-                  <tr>
-                        <td><input type="checkbox" name="selected" value="{{ row[0] }}"></td>
-                        <td>{{ row[0] }}</td>
-                        <td>{{ row[1] }}</td>
-                  </tr>
-                  {% endfor %}
+      <h2>Danh sách sinh viên</h2>
+      <form action="{{ url_for('delete_data') }}" method="post">
+            <table border="1" cellpadding="5" cellspacing="0">
+                  <thead>
+                        <tr>
+                              <th>Chọn</th>
+                              <th>STT</th>
+                              <th>Họ Tên</th>
+                              <th>MSSV</th>
+                              <th>Class</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        {% for row in data %}
+                        <tr>
+                              <td><input type="checkbox" name="selected" value="{{ row[0] }}"></td>
+                              <td>{{ loop.index }}</td>
+                              <td>{{ row[1] }}</td>
+                              <td>{{ row[2] }}</td>
+                              <td>{{ row[3] }}</td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
             </table>
             <div class="form-buttons">
-                  <button type="submit">Go to Details</button>
+                  <button type="submit" class="delete">Xóa hàng đã chọn</button>
                   <a href="{{ url_for('login') }}">Log out</a>
             </div>
       </form>
 </body>
+
 
 </html>

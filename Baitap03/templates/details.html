@@ -112,17 +112,21 @@
             <tr>
                   <th>Class</th>
                   <th>Họ Tên</th>
+                  <th>MSSV</th>
             </tr>
             {% for row in data %}
             <tr>
-                  <td>{{ row[0] }}</td>
-                  <td>{{ row[1] }}</td>
+                  <td>{{ row[3] }}</td> <!-- Class (Cột thứ 4 trong bảng khoacntt) -->
+                  <td>{{ row[1] }}</td> <!-- Name (Cột thứ 2 trong bảng khoacntt) -->
+                  <td>{{ row[2] }}</td> <!-- MSSV (Cột thứ 3 trong bảng khoacntt) -->
             </tr>
             {% endfor %}
       </table>
 
-      <a href="{{ url_for('home') }}" class="back-link">Back to Main Page</a>
+      <a href="{{ url_for('home') }}" class="back-link">Quay về trang chính</a>
       <a href="{{ url_for('login') }}">Log out</a>
 </body>
+
+
 
 </html>
