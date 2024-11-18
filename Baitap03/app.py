@@ -51,7 +51,6 @@ def add_data():
         if not new_name or not new_mssv or not new_class:
             flash("Tất cả các trường (name, mssv, class) đều bắt buộc.", 'error')
             return redirect(url_for('home'))
-
         db = Database(db_name='quanlysinhvien', user=session['user'], password=session['password'], host='localhost', port=5432)
         if db.connect():
             try:
