@@ -204,14 +204,14 @@ class DatabaseApp:
             self.database.cur.execute(search_query, (self.search_value.get(),))
             rows = self.database.cur.fetchall()
 
-            # Clear previous data from Treeview
+            # Làm sạch Treeview trước khi hiển thị kết quả
             for item in self.tree.get_children():
-                self.tree.delete(item)
+                self.tree.delete(item) # Xóa tất cả các dữ liệu cũ
 
-            # Display search results
+            # Hiển thị kết quả tìm kiếm
             if rows:
                 for idx, row in enumerate(rows, start=1):
-                    self.tree.insert("", "end", values=(idx, row[1], row[2], row[3]))  # Assuming the order of columns is (mssv, name, class)
+                    self.tree.insert("", "end", values=(idx, row[1], row[2], row[3]))  
             else:
                 messagebox.showinfo("No Data", "Không tìm thấy lớp này!")
         except Exception as e:

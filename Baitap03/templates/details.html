@@ -110,15 +110,15 @@
 
       <table>
             <tr>
-                  <th>Class</th>
                   <th>Họ Tên</th>
                   <th>MSSV</th>
+                  <th>Class</th>
             </tr>
             {% for row in data %}
             <tr>
-                  <td>{{ row[3] }}</td> <!-- Class (Cột thứ 4 trong bảng khoacntt) -->
-                  <td>{{ row[1] }}</td> <!-- Name (Cột thứ 2 trong bảng khoacntt) -->
-                  <td>{{ row[2] }}</td> <!-- MSSV (Cột thứ 3 trong bảng khoacntt) -->
+                  <td>{{ row[1] }}</td> 
+                  <td>{{ row[2] }}</td> 
+                  <td>{{ row[3] }}</td> 
             </tr>
             {% endfor %}
       </table>
