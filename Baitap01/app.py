@@ -20,7 +20,8 @@ win.geometry('500x300+400+100')
 win.attributes('-topmost', True)
 win.config(bg = bg_Color)
 PATH_DIRECTORY = os.path.dirname(__file__) # vào thẳng folder dự án đang làm việc
-PATH_IMAGES = os.path.join(PATH_DIRECTORY, 'imgs') # từ folder dự án join vào folder ảnh 'imgs'
+PATH_IMAGES = os.path.join(PATH_DIRECTORY, 'imgs') # từ folder dự án join vào folder ảnh 'imgs'4
+
 win.iconbitmap(os.path.join(PATH_IMAGES, 'icon_cal.ico'))
 
 font_title = font.Font(family='Trajan Pro', size=16,)
