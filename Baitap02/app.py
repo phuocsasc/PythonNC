@@ -8,6 +8,7 @@ from PIL import Image, ImageTk
 from database import Database
 
 
+
 class DatabaseApp:
     def __init__(self, root):
         self.root = root
